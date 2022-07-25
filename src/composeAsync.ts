@@ -1,5 +1,5 @@
-import { flowAsync } from './flowAsync';
-import { Pipe, UnaryFunction } from './types';
+import { flowAsync } from './flowAsync.ts';
+import { Pipe, UnaryFunction } from './types.ts';
 
 export function composeAsync<InputValue, ReturnValue>(
   fn1: UnaryFunction<InputValue, ReturnValue>
@@ -130,7 +130,7 @@ export function composeAsync<
 ): Pipe<InputValue, ReturnValue>;
 
 export function composeAsync<InputValue = unknown, ReturnValue = unknown>(
-  ...callbacks: UnaryFunction<any, unknown>[]
+  ...callbacks: UnaryFunction<unknown, unknown>[]
 ): Pipe<InputValue, ReturnValue>;
 
 export function composeAsync(

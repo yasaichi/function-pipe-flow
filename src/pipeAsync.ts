@@ -1,5 +1,5 @@
-import { flowAsync } from './flowAsync';
-import { UnaryFunction } from './types';
+import { flowAsync } from './flowAsync.ts';
+import { UnaryFunction } from './types.ts';
 
 export function pipeAsync<InputValue, ReturnValue>(
   input: InputValue,
@@ -135,7 +135,7 @@ export function pipeAsync<
 
 export function pipeAsync<InputValue, ReturnValue = unknown>(
   input?: InputValue,
-  ...callbacks: UnaryFunction<any, unknown>[]
+  ...callbacks: UnaryFunction<unknown, unknown>[]
 ): Promise<ReturnValue>;
 
 export function pipeAsync(
