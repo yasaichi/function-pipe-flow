@@ -1,28 +1,37 @@
 import { flowAsync } from './flowAsync.ts';
-import { Pipe, UnaryFunction } from './types.ts';
+import { Pipe, UnaryFunction, VariadicFunction } from './types.ts';
 
-export function composeAsync<InputValue, ReturnValue>(
-  fn1: UnaryFunction<InputValue, ReturnValue>
-): Pipe<InputValue, ReturnValue>;
+export function composeAsync<InputValues extends unknown[]>(): Pipe<
+  InputValues,
+  InputValues[0]
+>;
 
-export function composeAsync<InputValue, ResultValue1, ReturnValue>(
-  fn2: UnaryFunction<ResultValue1, ReturnValue>,
-  fn1: UnaryFunction<InputValue, ResultValue1>
-): Pipe<InputValue, ReturnValue>;
+export function composeAsync<InputValues extends unknown[], ReturnValue>(
+  fn1: VariadicFunction<InputValues, ReturnValue>
+): Pipe<InputValues, ReturnValue>;
 
 export function composeAsync<
-  InputValue,
+  InputValues extends unknown[],
+  ResultValue1,
+  ReturnValue
+>(
+  fn2: UnaryFunction<ResultValue1, ReturnValue>,
+  fn1: VariadicFunction<InputValues, ResultValue1>
+): Pipe<InputValues, ReturnValue>;
+
+export function composeAsync<
+  InputValues extends unknown[],
   ResultValue1,
   ResultValue2,
   ReturnValue
 >(
   fn3: UnaryFunction<ResultValue2, ReturnValue>,
   fn2: UnaryFunction<ResultValue1, ResultValue2>,
-  fn1: UnaryFunction<InputValue, ResultValue1>
-): Pipe<InputValue, ReturnValue>;
+  fn1: VariadicFunction<InputValues, ResultValue1>
+): Pipe<InputValues, ReturnValue>;
 
 export function composeAsync<
-  InputValue,
+  InputValues extends unknown[],
   ResultValue1,
   ResultValue2,
   ResultValue3,
@@ -31,11 +40,11 @@ export function composeAsync<
   fn4: UnaryFunction<ResultValue3, ReturnValue>,
   fn3: UnaryFunction<ResultValue2, ResultValue3>,
   fn2: UnaryFunction<ResultValue1, ResultValue2>,
-  fn1: UnaryFunction<InputValue, ResultValue1>
-): Pipe<InputValue, ReturnValue>;
+  fn1: VariadicFunction<InputValues, ResultValue1>
+): Pipe<InputValues, ReturnValue>;
 
 export function composeAsync<
-  InputValue,
+  InputValues extends unknown[],
   ResultValue1,
   ResultValue2,
   ResultValue3,
@@ -46,11 +55,11 @@ export function composeAsync<
   fn4: UnaryFunction<ResultValue3, ResultValue4>,
   fn3: UnaryFunction<ResultValue2, ResultValue3>,
   fn2: UnaryFunction<ResultValue1, ResultValue2>,
-  fn1: UnaryFunction<InputValue, ResultValue1>
-): Pipe<InputValue, ReturnValue>;
+  fn1: VariadicFunction<InputValues, ResultValue1>
+): Pipe<InputValues, ReturnValue>;
 
 export function composeAsync<
-  InputValue,
+  InputValues extends unknown[],
   ResultValue1,
   ResultValue2,
   ResultValue3,
@@ -63,11 +72,11 @@ export function composeAsync<
   fn4: UnaryFunction<ResultValue3, ResultValue4>,
   fn3: UnaryFunction<ResultValue2, ResultValue3>,
   fn2: UnaryFunction<ResultValue1, ResultValue2>,
-  fn1: UnaryFunction<InputValue, ResultValue1>
-): Pipe<InputValue, ReturnValue>;
+  fn1: VariadicFunction<InputValues, ResultValue1>
+): Pipe<InputValues, ReturnValue>;
 
 export function composeAsync<
-  InputValue,
+  InputValues extends unknown[],
   ResultValue1,
   ResultValue2,
   ResultValue3,
@@ -82,11 +91,11 @@ export function composeAsync<
   fn4: UnaryFunction<ResultValue3, ResultValue4>,
   fn3: UnaryFunction<ResultValue2, ResultValue3>,
   fn2: UnaryFunction<ResultValue1, ResultValue2>,
-  fn1: UnaryFunction<InputValue, ResultValue1>
-): Pipe<InputValue, ReturnValue>;
+  fn1: VariadicFunction<InputValues, ResultValue1>
+): Pipe<InputValues, ReturnValue>;
 
 export function composeAsync<
-  InputValue,
+  InputValues extends unknown[],
   ResultValue1,
   ResultValue2,
   ResultValue3,
@@ -103,11 +112,11 @@ export function composeAsync<
   fn4: UnaryFunction<ResultValue3, ResultValue4>,
   fn3: UnaryFunction<ResultValue2, ResultValue3>,
   fn2: UnaryFunction<ResultValue1, ResultValue2>,
-  fn1: UnaryFunction<InputValue, ResultValue1>
-): Pipe<InputValue, ReturnValue>;
+  fn1: VariadicFunction<InputValues, ResultValue1>
+): Pipe<InputValues, ReturnValue>;
 
 export function composeAsync<
-  InputValue,
+  InputValues extends unknown[],
   ResultValue1,
   ResultValue2,
   ResultValue3,
@@ -126,15 +135,21 @@ export function composeAsync<
   fn4: UnaryFunction<ResultValue3, ResultValue4>,
   fn3: UnaryFunction<ResultValue2, ResultValue3>,
   fn2: UnaryFunction<ResultValue1, ResultValue2>,
-  fn1: UnaryFunction<InputValue, ResultValue1>
-): Pipe<InputValue, ReturnValue>;
-
-export function composeAsync<InputValue = unknown, ReturnValue = unknown>(
-  ...callbacks: UnaryFunction<unknown, unknown>[]
-): Pipe<InputValue, ReturnValue>;
+  fn1: VariadicFunction<InputValues, ResultValue1>
+): Pipe<InputValues, ReturnValue>;
 
 export function composeAsync(
-  ...callbacks: UnaryFunction<unknown, unknown>[]
-): Pipe<unknown, unknown> {
-  return flowAsync(...[...callbacks].reverse());
+  ...fns: [
+    ...UnaryFunction<unknown, unknown>[],
+    VariadicFunction<unknown[], unknown>
+  ]
+): Pipe<unknown[], unknown>;
+
+export function composeAsync(
+  ...fns: [
+    ...UnaryFunction<unknown, unknown>[],
+    VariadicFunction<unknown[], unknown>
+  ]
+): Pipe<unknown[], unknown> {
+  return flowAsync(...[...fns].reverse());
 }
